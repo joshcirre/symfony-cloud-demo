@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ show.name }} — Show Finder{% endblock %}
+
+{% block body %}
+    <main class="page page--detail">
+        <a href="{{ path('app_home') }}" class="back-link">← Back to search</a>
+
+        <article class="detail">
+            <div class="detail-poster">
+                {% if show.imageOriginal ?? show.image %}
+                    <img src="{{ show.imageOriginal ?? show.image }}" alt="{{ show.name }} poster">
+                {% else %}
+                    <div class="poster-placeholder">No image</div>
+                {% endif %}
+            </div>
+
+            <div class="detail-body">
+                <h1 class="detail-title">{{ show.name }}</h1>
+
+                <p class="detail-meta">
+                    {% if show.rating %}<span class="rating">★ {{ show.rating }}</span>{% endif %}
+                    {% if show.premiered %}<span>{{ show.premiered|slice(0, 4) }}{% if show.ended %}–{{ show.ended|slice(0, 4) }}{% endif %}</span>{% endif %}
+                    {% if show.status %}<span class="status status--{{ show.status|lower|replace({' ': '-'}) }}">{{ show.status }}</span>{% endif %}
+                    {% if show.type %}<span>{{ show.type }}</span>{% endif %}
+                </p>
+
+                {% if show.genres is not empty %}
+                    <ul class="genres">
+                        {% for genre in show.genres %}<li>{{ genre }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% if show.summary %}
+                    <div class="detail-summary">{{ show.summary|raw }}</div>
+                {% endif %}
+
+                <dl class="facts">
+                    {% if show.network %}<div><dt>Network</dt><dd>{{ show.network }}</dd></div>{% endif %}
+                    {% if show.runtime %}<div><dt>Runtime</dt><dd>{{ show.runtime }} min</dd></div>{% endif %}
+                    {% if show.language %}<div><dt>Language</dt><dd>{{ show.language }}</dd></div>{% endif %}
+                    {% if show.seasonCount %}<div><dt>Seasons</dt><dd>{{ show.seasonCount }}</dd></div>{% endif %}
+                    {% if show.schedule and show.schedule.days is not empty %}
+                        <div><dt>Schedule</dt><dd>{{ show.schedule.days|join(', ') }}{% if show.schedule.time %} at {{ show.schedule.time }}{% endif %}</dd></div>
+                    {% endif %}
+                </dl>
+
+                <p class="detail-links">
+                    {% if show.officialSite %}<a href="{{ show.officialSite }}" target="_blank" rel="noopener">Official site ↗</a>{% endif %}
+                    {% if show.url %}<a href="{{ show.url }}" target="_blank" rel="noopener">View on TVMaze ↗</a>{% endif %}
+                </p>
+            </div>
+        </article>
+
+        {% if show.cast is not empty %}
+            <section class="cast">
+                <h2 class="section-title">Cast</h2>
+                <div class="cast-grid">
+                    {% for member in show.cast %}
+                        <div class="cast-member">
+                            <div class="cast-photo">
+                                {% if member.image %}
+                                    <img src="{{ member.image }}" alt="{{ member.person }}" loading="lazy">
+                                {% else %}
+                                    <div class="poster-placeholder">—</div>
+                                {% endif %}
+                            </div>
+                            <p class="cast-name">{{ member.person }}</p>
+                            {% if member.character %}<p class="cast-character">{{ member.character }}</p>{% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </main>
+{% endblock %}

@@ -44,6 +44,44 @@ final class TvMazeClient
     }
 
     /**
+     * Fetch a single show by id, with cast and seasons embedded.
+     *
+     * @return array<string, mixed>|null Null when the show does not exist
+     */
+    public function getShow(int $id): ?array
+    {
+        $response = $this->httpClient->request('GET', self::BASE_URL.'/shows/'.$id, [
+            'query' => ['embed' => ['cast', 'seasons']],
+        ]);
+
+        if (404 === $response->getStatusCode()) {
+            return null;
+        }
+
+        $show = $response->toArray();
+        $embedded = $show['_embedded'] ?? [];
+
+        return $this->normalizeShow($show) + [
+            'language' => $show['language'] ?? null,
+            'runtime' => $show['averageRuntime'] ?? $show['runtime'] ?? null,
+            'ended' => $show['ended'] ?? null,
+            'officialSite' => $show['officialSite'] ?? null,
+            'schedule' => $show['schedule'] ?? null,
+            'type' => $show['type'] ?? null,
+            'imageOriginal' => $show['image']['original'] ?? null,
+            'seasonCount' => isset($embedded['seasons']) ? \count($embedded['seasons']) : null,
+            'cast' => array_map(
+                fn (array $member) => [
+                    'person' => $member['person']['name'] ?? null,
+                    'character' => $member['character']['name'] ?? null,
+                    'image' => $member['person']['image']['medium'] ?? null,
+                ],
+                \array_slice($embedded['cast'] ?? [], 0, 12),
+            ),
+        ];
+    }
+
+    /**
      * Flatten the parts of a TVMaze show payload we actually display.
      *
      * @param array<string, mixed> $show

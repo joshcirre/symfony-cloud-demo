@@ -27,7 +27,7 @@
 
     <div class="results">
         {% for show in shows %}
-            <article class="card">
+            <a class="card" href="{{ show.id ? path('app_show', { id: show.id }) : '#' }}">
                 <div class="poster">
                     {% if show.image %}
                         <img src="{{ show.image }}" alt="{{ show.name }} poster" loading="lazy">
@@ -39,17 +39,11 @@
                     {% endif %}
                 </div>
                 <div class="card-body">
-                    <h2 class="card-title">
-                        {% if show.url %}
-                            <a href="{{ show.url }}" target="_blank" rel="noopener">{{ show.name }}</a>
-                        {% else %}
-                            {{ show.name }}
-                        {% endif %}
-                    </h2>
+                    <h2 class="card-title">{{ show.name }}</h2>
                     <p class="meta">
                         {% if show.premiered %}<span>{{ show.premiered|slice(0, 4) }}</span>{% endif %}
                         {% if show.network %}<span>{{ show.network }}</span>{% endif %}
-                        {% if show.status %}<span class="status status--{{ show.status|lower }}">{{ show.status }}</span>{% endif %}
+                        {% if show.status %}<span class="status status--{{ show.status|lower|replace({' ': '-'}) }}">{{ show.status }}</span>{% endif %}
                     </p>
                     {% if show.genres is not empty %}
                         <ul class="genres">
@@ -60,7 +54,7 @@
                         <p class="summary">{{ show.summary|striptags|slice(0, 220) }}{{ show.summary|striptags|length > 220 ? '…' }}</p>
                     {% endif %}
                 </div>
-            </article>
+            </a>
         {% else %}
             {% if query|trim|length >= 2 %}
                 <div class="empty" data-loading="hide">
