@@ -25,7 +25,24 @@
         </p>
     {% endif %}
 
-    <div class="results">
+    {# Skeleton placeholder — Live Components shows [data-loading] elements only while a request is in flight.
+       data-loading sits on the wrapper so the controller's inline display toggle doesn't clobber the grid. #}
+    <div data-loading aria-hidden="true">
+        <div class="results">
+            {% for i in 1..10 %}
+                <div class="skeleton-card">
+                    <div class="sk skeleton-poster"></div>
+                    <div class="skeleton-body">
+                        <div class="sk skeleton-line" style="width: 70%"></div>
+                        <div class="sk skeleton-line" style="width: 45%"></div>
+                        <div class="sk skeleton-line skeleton-line--sm" style="width: 90%"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="results" data-loading="hide">
         {% for show in shows %}
             <a class="card" href="{{ show.id ? path('app_show', { id: show.id }) : '#' }}">
                 <div class="poster">

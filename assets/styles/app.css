@@ -289,6 +289,48 @@ a:hover {
     text-wrap: pretty;
 }
 
+/* ---- Loading skeleton ---- */
+.skeleton-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--ring), var(--shadow-xs);
+    overflow: hidden;
+}
+.skeleton-poster {
+    aspect-ratio: 2 / 3;
+}
+.skeleton-body {
+    padding: 0.85rem 0.95rem 1.05rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+.skeleton-line {
+    height: 0.75rem;
+    border-radius: 5px;
+}
+.skeleton-line--sm {
+    height: 0.6rem;
+    margin-top: 0.15rem;
+}
+.sk {
+    background: linear-gradient(
+        100deg,
+        var(--slate-3) 30%,
+        var(--slate-4) 50%,
+        var(--slate-3) 70%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.3s ease-in-out infinite;
+}
+@keyframes shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .sk { animation: none; }
+}
+
 /* ---- Empty states ---- */
 .empty {
     grid-column: 1 / -1;
