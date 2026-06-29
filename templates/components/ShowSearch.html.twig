@@ -19,16 +19,18 @@
 
     {% set shows = this.shows %}
 
-    {% if query|trim|length >= 2 %}
-        <p class="result-count" data-loading="hide">
-            {{ shows|length }} result{{ shows|length == 1 ? '' : 's' }} for “{{ query }}”
-        </p>
-    {% endif %}
+    {# data-loading toggles the `is-loading` class on this wrapper during a request.
+       A class toggle is morph-safe (idiomorph resets the class from the server HTML);
+       toggling inline display directly on the grids is not. CSS below drives what shows. #}
+    <div class="results-area" data-loading="addClass(is-loading)">
+        {% if query|trim|length >= 2 %}
+            <p class="result-count">
+                {{ shows|length }} result{{ shows|length == 1 ? '' : 's' }} for “{{ query }}”
+            </p>
+        {% endif %}
 
-    {# Skeleton placeholder — Live Components shows [data-loading] elements only while a request is in flight.
-       data-loading sits on the wrapper so the controller's inline display toggle doesn't clobber the grid. #}
-    <div data-loading aria-hidden="true">
-        <div class="results">
+        {# Skeleton placeholder — shown via CSS only while .results-area.is-loading #}
+        <div class="results skeleton-grid" aria-hidden="true">
             {% for i in 1..10 %}
                 <div class="skeleton-card">
                     <div class="sk skeleton-poster"></div>
@@ -40,9 +42,8 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
 
-    <div class="results" data-loading="hide">
+        <div class="results results-live">
         {% for show in shows %}
             <a class="card" href="{{ show.id ? path('app_show', { id: show.id }) : '#' }}">
                 <div class="poster">
@@ -74,7 +75,7 @@
             </a>
         {% else %}
             {% if query|trim|length >= 2 %}
-                <div class="empty" data-loading="hide">
+                <div class="empty">
                     <p>No shows found for “{{ query }}”.</p>
                     <p class="empty-hint">Try another title.</p>
                 </div>
@@ -85,5 +86,6 @@
                 </div>
             {% endif %}
         {% endfor %}
+        </div>
     </div>
 </div>

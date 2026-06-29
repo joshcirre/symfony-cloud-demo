@@ -290,6 +290,18 @@ a:hover {
 }
 
 /* ---- Loading skeleton ---- */
+/* Skeleton is hidden until the Live controller adds .is-loading to .results-area.
+   Toggling a class (not inline display) is morph-safe across re-renders. */
+.skeleton-grid {
+    display: none;
+}
+.results-area.is-loading .skeleton-grid {
+    display: grid;
+}
+.results-area.is-loading .results-live,
+.results-area.is-loading .result-count {
+    display: none;
+}
 .skeleton-card {
     background: #fff;
     border-radius: var(--radius);
