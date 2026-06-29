@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Show Finder — Symfony UX Live Components{% endblock %}
+
+{% block body %}
+    <main class="page">
+        <header class="hero">
+            <p class="kicker">Symfony UX · Live Components</p>
+            <h1>Show Finder</h1>
+            <p class="tagline">
+                Type to search TV shows in real time — no page reloads, no JavaScript to write.
+                Each keystroke re-renders the component on the server.
+            </p>
+        </header>
+
+        {{ component('ShowSearch') }}
+
+        <footer class="footer">
+            <p>
+                Built with <a href="https://symfony.com/bundles/ux-live-component/current/index.html" target="_blank" rel="noopener">Symfony UX Live Components</a>
+                · Data from <a href="https://www.tvmaze.com/api" target="_blank" rel="noopener">TVMaze</a>
+            </p>
+        </footer>
+    </main>
+{% endblock %}
